@@ -89,3 +89,13 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+uint64 
+sys_sem_open(void)
+{
+  int sem, value;
+  
+  argint(0, &sem);
+  argint(1, &value);
+  return (uint64)sem_open(sem, value); //el resultado de la fun sem_open se convierte en unit64
+}
