@@ -53,6 +53,28 @@ int sem_open(int sem, int value)
   }
 }
 
+int sem_up(int sem)
+{
+  if (sem < 0 || sem >= NSEMAFOROS)
+  {
+    printf("Error, ID del semaforo invalido\n"); // chequeo error de limites
+    return 0;
+  }
+
+  acquire(&(arreglo_semaforos[sem].lock)); // reservamos el spinlock para evitar carreras entre procesos
+
+  arreglo_semaforos->value++; // aumentamos el valor en 1 indicando que se libero un recurso
+
+  if (arreglo_semaforos[sem].value <= 0) // si luego de incrementar el valor es menor a 0, entonces hay procesos en espera de recursos
+  {
+    wakeup(&(arreglo_semaforos[sem])); // despertamos los procesos del canal asociado al semaforo
+  }
+
+  release(&(arreglo_semaforos[sem].lock)); // Liberamos el spinlock reservado
+
+  return 1; // retornamos 1 como caso de exito
+}
+
 int sem_close(int sem)
 {
   // controlamos que el id del semaforo "sem" sea un entero entre 0 y NSEMAFOROS

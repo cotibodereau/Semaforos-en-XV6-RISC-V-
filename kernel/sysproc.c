@@ -12,7 +12,7 @@ sys_exit(void)
   int n;
   argint(0, &n);
   exit(n);
-  return 0;  // not reached
+  return 0; // not reached
 }
 
 uint64
@@ -43,7 +43,7 @@ sys_sbrk(void)
 
   argint(0, &n);
   addr = myproc()->sz;
-  if(growproc(n) < 0)
+  if (growproc(n) < 0)
     return -1;
   return addr;
 }
@@ -57,8 +57,10 @@ sys_sleep(void)
   argint(0, &n);
   acquire(&tickslock);
   ticks0 = ticks;
-  while(ticks - ticks0 < n){
-    if(killed(myproc())){
+  while (ticks - ticks0 < n)
+  {
+    if (killed(myproc()))
+    {
       release(&tickslock);
       return -1;
     }
@@ -90,21 +92,28 @@ sys_uptime(void)
   return xticks;
 }
 
-uint64 
+uint64
 sys_sem_open(void)
 {
   int sem, value;
-  
+
   argint(0, &sem);
   argint(1, &value);
-  return (uint64)sem_open(sem, value); //el resultado de la fun sem_open se convierte en unit64
+  return (uint64)sem_open(sem, value); // el resultado de la fun sem_open se convierte en unit64
 }
 
 uint64
-sys_sem_close(void);
+sys_sem_up(void)
+{
+  int sem;
+  argint(0, &sem);
+  return (uint64)sem_up(sem);
+}
+
+uint64
+sys_sem_close(void)
 {
   int sem;
   argint(0, &sem);
   return (uint64)sem_close(sem);
 }
-
