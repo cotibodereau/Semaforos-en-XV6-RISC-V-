@@ -99,3 +99,12 @@ sys_sem_open(void)
   argint(1, &value);
   return (uint64)sem_open(sem, value); //el resultado de la fun sem_open se convierte en unit64
 }
+
+uint64
+sys_sem_close(void);
+{
+  int sem;
+  argint(0, &sem);
+  return (uint64)sem_close(sem);
+}
+

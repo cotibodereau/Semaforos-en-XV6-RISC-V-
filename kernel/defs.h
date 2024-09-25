@@ -187,6 +187,7 @@ void            virtio_disk_intr(void);
 
 //semaforos.c
 int             sem_open(int, int);
+int		sem_close(int);
 
 
 // number of elements in fixed-size array
