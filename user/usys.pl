@@ -36,3 +36,8 @@ entry("getpid");
 entry("sbrk");
 entry("sleep");
 entry("uptime");
+#Nuestras llamadas
+entry("sem_open");
+entry("sem_up");
+entry("sem_down");
+entry("sem_close");
