@@ -92,13 +92,6 @@ int sem_close(int sem)
   // se bloquea el lock del semaforo para evitar que otros procesos lo cierren/modifiquen
   acquire(&(arreglo_semaforos[sem].lock));
 
-  // si el semaforo no esta abierto, lo abrimos
-  if (arreglo_semaforos[sem].value == -1)
-  {
-    release(&(arreglo_semaforos[sem].lock)); // liberamos el lock
-    printf("Error, el semaforo no esta abierto\n");
-    return 1;
-  }
   arreglo_semaforos[sem].value = -1;       // semaforo cerrado
   release(&(arreglo_semaforos[sem].lock)); // liberamos lock
   return 1;
