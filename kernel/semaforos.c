@@ -67,6 +67,12 @@ int sem_up(int sem)
 
   if (arreglo_semaforos[sem].value <= 0) // si luego de incrementar el valor es menor a 0, entonces hay procesos en espera de recursos
   {
+    if(arreglo_semaforos[sem].value == -1)
+    {
+      printf("ERROR: no se puede aumentar el valor de un semaforo cerrado\n"); //Chequeamos si el semaforo esta cerrado.
+       release(&(arreglo_semaforos[sem].lock)); // Liberamos el spinlock reservado
+       return 0;
+    }
     wakeup(&(arreglo_semaforos[sem])); // despertamos los procesos del canal asociado al semaforo
   }
 
