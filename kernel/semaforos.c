@@ -103,3 +103,24 @@ int sem_close(int sem)
   release(&(arreglo_semaforos[sem].lock)); // liberamos lock
   return 1;
 }
+
+int sem_down(int sem)
+{  
+  acquire(&(arreglo_semaforos[sem].lock));
+  if(arreglo_semaforos[sem].value == -1)
+  {
+      printf("ERROR: no se puede aumentar el valor de un semaforo cerrado\n"); //Chequeamos si el semaforo esta cerrado.
+       release(&(arreglo_semaforos[sem].lock)); // Liberamos el spinlock reservado
+       return 0;
+  }
+  
+  while(arreglo_semaforos[sem].value == 0)
+  {
+    sleep(&(arreglo_semaforos[sem]), &(arreglo_semaforos[sem].lock)); 
+  }
+// si el semaforo no tiene recursos, utilizamos sleep para "dormir" los procesos
+  --arreglo_semaforos[sem].value; 
+  release(&(arreglo_semaforos[sem].lock)); // liberamos lock
+
+  return 1;
+}

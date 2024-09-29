@@ -189,6 +189,7 @@ void virtio_disk_intr(void);
 int sem_open(int, int);
 int sem_up(int);
 int sem_close(int);
+int sem_down(int);
 
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x) / sizeof((x)[0]))

@@ -22,4 +22,5 @@
 #define SYS_close 21
 #define SYS_sem_open 22
 #define SYS_sem_up 23
+#define SYS_sem_down 24
 #define SYS_sem_close 25

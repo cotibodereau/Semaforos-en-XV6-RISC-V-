@@ -117,3 +117,11 @@ sys_sem_close(void)
   argint(0, &sem);
   return (uint64)sem_close(sem);
 }
+
+uint64
+sys_sem_down(void)
+{
+  int sem;
+  argint(0, &sem);
+  return (uint64)sem_down(sem);
+}
