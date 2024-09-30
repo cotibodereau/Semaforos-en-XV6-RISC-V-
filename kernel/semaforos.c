@@ -10,48 +10,54 @@
 struct semaforo
 {
   int value;            // cantidad de recursos que el semaforo controla
+  int semActivo;        // Indica con 1 si el semaforo ya esta un eso y 0 si no esta en uso
   struct spinlock lock; // spinlock encargado de proteger el acceso al semaforo
 };
 
 struct semaforo arreglo_semaforos[NSEMAFOROS]; // arreglo donde se ubican los semaforos
 
-// se inicializa cada semaforo con value = -1 para indicar que aun no ha sido abierto y a su vez se le inicia un spinlock
+
 void init_arr()
 {
   for (unsigned int i = 0; i < NSEMAFOROS; ++i)
   {
-    arreglo_semaforos[i].value = -1;
-    initlock(&(arreglo_semaforos[i].lock), "semaforo");
+    arreglo_semaforos[i].value = 0;  // inicializamos en 0 
+    arreglo_semaforos[i].semActivo = 0; // inicializamos en 0 ya q esta inactivo el semaforo
+    initlock(&(arreglo_semaforos[i].lock), "semaforo"); // spinlock encargado de proteger el acceso al semaforo 
   }
 }
 
 int sem_open(int sem, int value)
 {
-  // controlamos que el id del semaforo "sem" sea un entero entre 0 y NSEMAFOROS
+  // Validamos el ID del semaforo 
   if (sem < 0 || sem >= NSEMAFOROS)
   {
     printf("Error, ID del semaforo invalido\n");
     return 0;
   }
 
-  // se bloquea el lock del semaforo para evitar que otros procesos lo cierren/modifiquen
+  // Se bloquea el lock del semaforo para evitar que otros procesos lo cierren/modifiquen
   acquire(&(arreglo_semaforos[sem].lock));
 
-  // si el semaforo no esta abierto, lo abrimos
-  if (arreglo_semaforos[sem].value == -1)
+  // Verificamos si el semaforo ya esta activo
+  if (arreglo_semaforos[sem].semActivo)
   {
-    arreglo_semaforos[sem].value = value;
-    release(&(arreglo_semaforos[sem].lock)); // se desbloquea el spinlock del semaforo ya que no se utilizara mas
-    return 1;
-  }
-  // si ya esta abierto e intentamos volver a abrirlo, se produce un error
-  else
-  {
+    // Si esta activo, liberamos el lock y retornamos error 
     release(&(arreglo_semaforos[sem].lock));
-    printf("Error, semaforo ya abierto\n");
+    printf ("Error, semáforo ya esta en uso\n");
     return 0;
   }
+  
+  // Inicializamos el semáforo
+  arreglo_semaforos[sem].value = value;
+  arreglo_semaforos[sem].semActivo = 1;
+
+  // Liberamos el lock
+  release(&(arreglo_semaforos[sem].lock));
+
+  return sem; // Retornamos el ID del semáforo
 }
+
 
 int sem_up(int sem)
 {
