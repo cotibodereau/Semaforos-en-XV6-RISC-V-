@@ -17,7 +17,7 @@ int main(int argc, char **argcv)
     // Comprobamos que el numero sea positivo
     if (numeroDeCiclos <= 0)
     {
-        printf("ERROR: El numero debe ser mayor a 0");
+        printf("ERROR: El numero debe ser mayor a 0\n");
         exit(1);
     }
 
@@ -30,7 +30,7 @@ int main(int argc, char **argcv)
     // Caso de error si falla la creacion del proceso
     if (pid < 0)
     {
-        printf("ERROR: Ocurrio un error creando el proceso");
+        printf("ERROR: Ocurrio un error creando el proceso\n");
         exit(1);
     }
     for (unsigned int i = 0; i < numeroDeCiclos; ++i)
@@ -40,12 +40,11 @@ int main(int argc, char **argcv)
             sem_down(semaforo_0);
             printf("ping\n");
             sem_up(semaforo_1);
-            
         }
         else
         {
             sem_down(semaforo_1);
-            printf("pong\n");
+            printf("       pong\n");
             sem_up(semaforo_0);
         }
     }

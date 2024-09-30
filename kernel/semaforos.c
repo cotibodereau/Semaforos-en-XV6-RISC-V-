@@ -4,7 +4,7 @@
 #include "spinlock.h"
 #include "defs.h"
 
-#define NSEMAFOROS 100
+#define NSEMAFOROS 15
 
 // defino la estructura del semaforo
 struct semaforo
@@ -16,20 +16,19 @@ struct semaforo
 
 struct semaforo arreglo_semaforos[NSEMAFOROS]; // arreglo donde se ubican los semaforos
 
-
 void init_arr()
 {
   for (unsigned int i = 0; i < NSEMAFOROS; ++i)
   {
-    arreglo_semaforos[i].value = 0;  // inicializamos en 0 
-    arreglo_semaforos[i].semActivo = 0; // inicializamos en 0 ya q esta inactivo el semaforo
-    initlock(&(arreglo_semaforos[i].lock), "semaforo"); // spinlock encargado de proteger el acceso al semaforo 
+    arreglo_semaforos[i].value = 0;                     // inicializamos en 0
+    arreglo_semaforos[i].semActivo = 0;                 // inicializamos en 0 ya q esta inactivo el semaforo
+    initlock(&(arreglo_semaforos[i].lock), "semaforo"); // spinlock encargado de proteger el acceso al semaforo
   }
 }
 
 int sem_open(int sem, int value)
 {
-  // Validamos el ID del semaforo 
+  // Validamos el ID del semaforo
   if (sem < 0 || sem >= NSEMAFOROS)
   {
     printf("Error, ID del semaforo invalido\n");
@@ -42,12 +41,12 @@ int sem_open(int sem, int value)
   // Verificamos si el semaforo ya esta activo
   if (arreglo_semaforos[sem].semActivo)
   {
-    // Si esta activo, liberamos el lock y retornamos error 
+    // Si esta activo, liberamos el lock y retornamos error
     release(&(arreglo_semaforos[sem].lock));
-    printf ("Error, semáforo ya esta en uso\n");
+    printf("Error, semáforo ya esta en uso\n");
     return 0;
   }
-  
+
   // Inicializamos el semáforo
   arreglo_semaforos[sem].value = value;
   arreglo_semaforos[sem].semActivo = 1;
@@ -57,7 +56,6 @@ int sem_open(int sem, int value)
 
   return sem; // Retornamos el ID del semáforo
 }
-
 
 int sem_up(int sem)
 {
@@ -92,14 +90,15 @@ int sem_close(int sem)
   acquire(&(arreglo_semaforos[sem].lock));
 
   arreglo_semaforos[sem].value = -1;       // semaforo cerrado
+  arreglo_semaforos[sem].semActivo = 0;    // como esta cerrado, lo dejamos inactivo
   release(&(arreglo_semaforos[sem].lock)); // liberamos lock
-  return 1;
+  return sem;
 }
 
 int sem_down(int sem)
 {
   acquire(&(arreglo_semaforos[sem].lock));
-  if(arreglo_semaforos[sem].value == -1)
+  if (arreglo_semaforos[sem].value == -1)
   {
     printf("ERROR: no se puede aumentar el valor de un semaforo cerrado\n"); // Chequeamos si el semaforo esta cerrado.
     release(&(arreglo_semaforos[sem].lock));                                 // Liberamos el spinlock reservado
