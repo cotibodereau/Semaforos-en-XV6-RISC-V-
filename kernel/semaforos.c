@@ -63,7 +63,7 @@ int sem_up(int sem)
 
   acquire(&(arreglo_semaforos[sem].lock)); // reservamos el spinlock para evitar carreras entre procesos
 
-  arreglo_semaforos->value++; // aumentamos el valor en 1 indicando que se libero un recurso
+  arreglo_semaforos[sem].value++; // aumentamos el valor en 1 indicando que se libero un recurso
 
   if (arreglo_semaforos[sem].value <= 0) // si luego de incrementar el valor es menor a 0, entonces hay procesos en espera de recursos
   {
