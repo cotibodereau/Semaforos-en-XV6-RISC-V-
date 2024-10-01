@@ -5,6 +5,18 @@ Para cerrar un semáforo le asignamos -1 de valor y lo dejamos inactivo, además
 Para las funciones de incremento y decremento garantizamos una correcta sincronización mediante los spinlock e implementamos su funcionamiento utilizando llamadas como sleep y wake up que se encargan de despertar o dormir los procesos teniendo en cuenta los recursos disponibles del semáforo. 
 La utilización de un campo de sí un semáforo está activo permite la reutilización de los mismos, lo cual nos garantiza un buen uso de los recursos disponibles.
 
+Por otro lado, en pingpong.c teníamos que sincronizar dos procesos para que se impriman "ping" y "pong" alternadamente, recibiendo un argumento que nos indique el número de veces que queremos hacer esto.
+Para esto nosotros primero revisamos que la cantidad de argumentos que nos pasan sea uno solo, y que aparte sea positivo. En caso de error, mostramos un mensaje de error y salimos. Luego, creamos dos semáforos, al primero (semaforo_0) lo inicializamos como activo (osea en 1) , así este proceso padre puede empezar a imprimir "ping" ahí mismo. Al segundo (semaforo_1) lo inicializamos como inactivo (osea en 0), teniendo que esperar su turno para imprimir "pong" para que no se pisen las salidas.
+Usamos un único fork() para crear el proceso hijo, si llega a salir mal la creación, mostramos de vuelta el mensaje de error y frenamos. 
+Para realizar la secuencia que queremos, usamos un for para que ambos procesos se turnen para imprimir. El padre espera su turno con sem_down(semaforo_0), después imprime "ping", y luego le deja el turno al hijo con sem_up(semaforo_1). Por otro lado, el hijo espera sem_down(semaforo_1), imprime el "pong" y le vuelve a pasar el turno al padre con  sem_up(semaforo_0). Después de que el ciclo se repita las n veces que se pidieron, el padre espera con wait(0) a que el hijo termine y ahí recién cerramos los semáforos con sem_close(semaforo_0) y sem_close(semaforo_1) para limpiar todo.
+
+
+.
+.
+.
+.
+.
+
 
 
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
