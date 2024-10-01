@@ -1,3 +1,12 @@
+Para la implementación de nuestro semáforo nosotros pensamos en diseñar una estructura constituida por tres campos, uno para el valor del semáforo, otro para indicar si el semáforo se encuentra activo (1 indica si / 0 indica no) y otro para los spinlock que nos garantizan evitar carreras entre los procesos y no tener problemas de sincronización.
+Luego creamos un arreglo de semáforos teniendo en cuenta que nuestro tamaño máximo lo definimos de forma constante en una variable con valor 0 y todos inactivos, cada uno con su debido spinlock. 
+Para cada una de las funciones sem realizamos chequeos de los casos bordes para así evitar que haya id´s incorrectos. En open buscamos el primer semáforo inactivo usando un ciclo y así inicializarlo cambiando su valor y su estado a 1, además, le asignamos su spinlock. 
+Para cerrar un semáforo le asignamos -1 de valor y lo dejamos inactivo, además de liberar su spinlock. 
+Para las funciones de incremento y decremento garantizamos una correcta sincronización mediante los spinlock e implementamos su funcionamiento utilizando llamadas como sleep y wake up que se encargan de despertar o dormir los procesos teniendo en cuenta los recursos disponibles del semáforo. 
+La utilización de un campo de sí un semáforo está activo permite la reutilización de los mismos, lo cual nos garantiza un buen uso de los recursos disponibles.
+
+
+
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
 Version 6 (v6).  xv6 loosely follows the structure and style of v6,
 but is implemented for a modern RISC-V multiprocessor using ANSI C.
