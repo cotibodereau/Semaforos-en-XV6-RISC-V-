@@ -1,3 +1,9 @@
+Integrantes: Fernández Bodereau Constanza - Ferreyra Navarro Nicolle Anahid - Fonseca Gonzalo Agustín - Heredia Mateo Andrés
+¿Cómo nos dividimos? 
+De las 4 funciones que había que implementar en semaforos.c , nos dividimos una cada uno. Después, para pingpong.c y el resto de cosas estuvimos en Discord haciendo entre todos :)
+
+Explicación de semaforos.c y pingpong.c
+
 Para la implementación de nuestro semáforo nosotros pensamos en diseñar una estructura constituida por tres campos, uno para el valor del semáforo, otro para indicar si el semáforo se encuentra activo (1 indica si / 0 indica no) y otro para los spinlock que nos garantizan evitar carreras entre los procesos y no tener problemas de sincronización.
 Luego creamos un arreglo de semáforos teniendo en cuenta que nuestro tamaño máximo lo definimos de forma constante en una variable con valor 0 y todos inactivos, cada uno con su debido spinlock. 
 Para cada una de las funciones sem realizamos chequeos de los casos bordes para así evitar que haya id´s incorrectos. En open buscamos el primer semáforo inactivo usando un ciclo y así inicializarlo cambiando su valor y su estado a 1, además, le asignamos su spinlock. 
