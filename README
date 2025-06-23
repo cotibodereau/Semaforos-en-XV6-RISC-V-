@@ -1,6 +1,19 @@
-Integrantes: Fernández Bodereau Constanza - Ferreyra Navarro Nicolle Anahid - Fonseca Gonzalo Agustín - Heredia Mateo Andrés
-¿Cómo nos dividimos? 
-De las 4 funciones que había que implementar en semaforos.c , nos dividimos una cada uno. Después, para pingpong.c y el resto de cosas estuvimos en Discord haciendo entre todos :)
+# Semáforos nombrados en XV6 (RISC-V)
+
+Implemento un sistema de semáforos nombrados dentro del kernel de XV6, agregando nuevas llamadas al sistema (`sem_open`, `sem_down`, `sem_up`, `sem_close`).
+
+Además, desarrollo un programa en espacio de usuario que sincroniza procesos usando estos semáforos para imprimir secuencias alternadas de "ping" y "pong".
+
+---
+
+# Named Semaphores in XV6 (RISC-V)
+
+I implement a named semaphore system within the XV6 kernel, adding new syscalls (`sem_open`, `sem_down`, `sem_up`, `sem_close`).
+
+I also develop a user-space program that uses these semaphores to synchronize processes and print alternating "ping" and "pong" sequences.
+
+---
+
 
 Explicación de semaforos.c y pingpong.c
 
